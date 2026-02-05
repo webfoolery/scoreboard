@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TNC Scoreboard</title>
+  <link rel="stylesheet" href="scoreboard.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="title">
+      <h1>TNC Scoreboard</h1>
+      <p>Digits or expressions. Tap a cell to override. Works great on phones.</p>
+    </div>
+
+    <div class="header-actions">
+      <button id="addTeamBtn" class="btn primary">+ Team</button>
+      <button id="undoBtn" class="btn">Undo last entry</button>
+      <button id="resetBtn" class="btn danger">Reset</button>
+    </div>
+  </header>
+
+  <main class="layout">
+    <section class="card">
+      <div class="card-head">
+        <h2>Teams</h2>
+        <div class="muted" id="teamCount"></div>
+      </div>
+
+      <div class="card-body" id="teamsPanel"></div>
+      <div class="card-foot">
+        Tip: Edit names. Use ↑ / ↓ to set play order. Remove teams (min 2).
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-head sticky">
+        <h2>Scores</h2>
+        <div class="muted" id="roundCount"></div>
+      </div>
+
+      <div class="table-wrap">
+        <table class="score-table" id="scoreTable" aria-label="Score table">
+          <!-- filled by JS -->
+        </table>
+      </div>
+
+      <div class="entry-area">
+        <div class="entry-grid">
+          <div class="field">
+            <label for="teamSelect">Team</label>
+            <select id="teamSelect"></select>
+          </div>
+
+          <div class="field grow">
+            <label for="exprInput">Score / Expression</label>
+            <input
+              id="exprInput"
+              inputmode="decimal"
+              autocomplete="off"
+              placeholder="e.g. 354  or  621 * 14 / 3"
+            />
+            <div class="help">
+              Allowed: <code>0-9</code> <code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>( )</code> <code>.</code>
+            </div>
+          </div>
+
+          <div class="field">
+            <label>&nbsp;</label>
+            <button id="addScoreBtn" class="btn primary full">Add</button>
+          </div>
+        </div>
+
+        <div class="toast" id="toast" role="status" aria-live="polite"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Modal for manual overrides -->
+  <div class="modal" id="overrideModal" aria-hidden="true">
+    <div class="modal-backdrop" data-close="1"></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="overrideTitle">
+      <div class="modal-head">
+        <div>
+          <div class="modal-title" id="overrideTitle">Override score</div>
+          <div class="modal-sub" id="overrideSub">—</div>
+        </div>
+        <button class="iconbtn" aria-label="Close" data-close="1">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="field">
+          <label for="overrideInput">New value (digits or expression)</label>
+          <input id="overrideInput" inputmode="decimal" autocomplete="off" placeholder="e.g. 120 or (20+10)*4" />
+          <div class="help">
+            This replaces that cell. It will be marked as <span class="pill">override</span>.
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button class="btn" id="clearCellBtn">Clear cell</button>
+          <div class="spacer"></div>
+          <button class="btn" data-close="1">Cancel</button>
+          <button class="btn primary" id="saveOverrideBtn">Save</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="scoreboard.js"></script>
+</body>
+</html>
