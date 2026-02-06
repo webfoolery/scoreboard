@@ -9,7 +9,7 @@
 <body>
   <header class="app-header">
     <div class="title">
-      <h1>TNC Scoreboard</h1>
+      <h1>Scoreboard</h1>
       <p>Digits or expressions. Tap a cell to override. Works great on phones.</p>
     </div>
 
@@ -56,7 +56,7 @@
             <label for="exprInput">Score / Expression</label>
             <input
               id="exprInput"
-              inputmode="decimal"
+              inputmode="text"
               autocomplete="off"
               autocapitalize="off"
               spellcheck="false"
@@ -64,13 +64,6 @@
             />
             <div class="help">
               Allowed: <code>0-9</code> <code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>( )</code> <code>.</code>
-            </div>
-
-            <div class="toggleRow">
-              <label class="toggle">
-                <input type="checkbox" id="exprModeToggle" />
-                <span>Expression mode (+ − × ÷)</span>
-              </label>
             </div>
           </div>
 
@@ -102,7 +95,7 @@
           <label for="overrideInput">New value (digits or expression)</label>
           <input
             id="overrideInput"
-            inputmode="decimal"
+            inputmode="text"
             autocomplete="off"
             autocapitalize="off"
             spellcheck="false"

@@ -196,21 +196,6 @@ input:focus, select:focus{
   color:rgba(255,255,255,.86);
 }
 
-.toggleRow{ margin-top:10px; }
-.toggle{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  color: var(--muted);
-  font-size: 12px;
-  user-select:none;
-}
-.toggle input{
-  width: 18px;
-  height: 18px;
-  accent-color: rgba(62,231,200,.95);
-}
-
 .teams{
   display:flex;
   flex-direction:column;
