@@ -58,10 +58,19 @@
               id="exprInput"
               inputmode="decimal"
               autocomplete="off"
+              autocapitalize="off"
+              spellcheck="false"
               placeholder="e.g. 354  or  621 * 14 / 3"
             />
             <div class="help">
               Allowed: <code>0-9</code> <code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>( )</code> <code>.</code>
+            </div>
+
+            <div class="toggleRow">
+              <label class="toggle">
+                <input type="checkbox" id="exprModeToggle" />
+                <span>Expression mode (+ − × ÷)</span>
+              </label>
             </div>
           </div>
 
@@ -91,7 +100,14 @@
       <div class="modal-body">
         <div class="field">
           <label for="overrideInput">New value (digits or expression)</label>
-          <input id="overrideInput" inputmode="decimal" autocomplete="off" placeholder="e.g. 120 or (20+10)*4" />
+          <input
+            id="overrideInput"
+            inputmode="decimal"
+            autocomplete="off"
+            autocapitalize="off"
+            spellcheck="false"
+            placeholder="e.g. 120 or (20+10)*4"
+          />
           <div class="help">
             This replaces that cell. It will be marked as <span class="pill">override</span>.
           </div>

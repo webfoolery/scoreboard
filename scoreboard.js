@@ -7,6 +7,7 @@
    - Team play order controls (move up/down)
    - Reset confirmation + clears localStorage
    - After adding score, team selector advances to next team
+   - Expression mode toggle switches keyboard between numeric keypad and full keyboard
 */
 
 const $ = (sel) => document.querySelector(sel);
@@ -15,6 +16,7 @@ const els = {
   teamsPanel: $("#teamsPanel"),
   teamSelect: $("#teamSelect"),
   exprInput: $("#exprInput"),
+  exprModeToggle: $("#exprModeToggle"),
   addScoreBtn: $("#addScoreBtn"),
   addTeamBtn: $("#addTeamBtn"),
   undoBtn: $("#undoBtn"),
@@ -31,7 +33,7 @@ const els = {
   clearCellBtn: $("#clearCellBtn"),
 };
 
-const STORAGE_KEY = "scoreboard.v3";
+const STORAGE_KEY = "scoreboard.v4";
 
 let state = loadState() ?? defaultState();
 
@@ -266,6 +268,50 @@ function nextTeamId(currentId){
   return state.teams[(idx + 1) % state.teams.length].id;
 }
 
+function trimTrailingEmptyRounds(){
+  const isRoundEmpty = (round) => state.teams.every(t => !round.scoresByTeam[t.id]);
+  while(state.rounds.length > 0 && isRoundEmpty(state.rounds[state.rounds.length - 1])){
+    state.rounds.pop();
+  }
+}
+
+// ---------------- Keyboard mode toggle ----------------
+function setInputMode(el, modeOrNull){
+  if(!el) return;
+
+  if(modeOrNull){
+    // Set both property + attribute
+    el.inputMode = modeOrNull;
+    el.setAttribute("inputmode", modeOrNull);
+  }else{
+    // Remove completely for full keyboard
+    el.inputMode = "";
+    el.removeAttribute("inputmode");
+  }
+}
+
+function applyInputMode(){
+  const exprMode = !!els.exprModeToggle?.checked;
+
+  if(exprMode){
+    // Expression mode: force full keyboard
+    setInputMode(els.exprInput, null);
+    setInputMode(els.overrideInput, null);
+  }else{
+    // Numeric mode: force keypad
+    setInputMode(els.exprInput, "numeric");  // or "decimal" if you want the dot key
+    setInputMode(els.overrideInput, "numeric");
+  }
+
+  // Android often needs a refocus to refresh the keyboard
+  const active = document.activeElement;
+  if(active === els.exprInput || active === els.overrideInput){
+    active.blur();
+    setTimeout(() => active.focus(), 0);
+  }
+}
+
+
 // ---------------- Render ----------------
 function render(){
   saveState();
@@ -353,6 +399,9 @@ function render(){
 
   // Meta
   els.roundCount.textContent = `${state.rounds.length} round${state.rounds.length === 1 ? "" : "s"}`;
+
+  // Ensure inputmode matches toggle (in case of rerender / restore)
+  applyInputMode();
 }
 
 function renderTable(){
@@ -570,13 +619,6 @@ function undoLast(){
   }
 }
 
-function trimTrailingEmptyRounds(){
-  const isRoundEmpty = (round) => state.teams.every(t => !round.scoresByTeam[t.id]);
-  while(state.rounds.length > 0 && isRoundEmpty(state.rounds[state.rounds.length - 1])){
-    state.rounds.pop();
-  }
-}
-
 function resetAll(){
   const ok = window.confirm(
     "Reset everything?\n\nThis will clear all teams, rounds, and saved data (localStorage)."
@@ -603,7 +645,10 @@ function openOverrideModal(roundIndex, teamId){
   els.overrideSub.textContent = `${round.label} • ${team?.name ?? "Team"}`;
   els.overrideInput.value = existing ? existing.expr : "";
   els.overrideModal.setAttribute("aria-hidden", "false");
-  setTimeout(() => els.overrideInput.focus(), 0);
+  setTimeout(() => {
+    els.overrideInput.focus();
+    applyInputMode(); // ensure mode on open
+  }, 0);
 }
 
 function closeOverrideModal(){
@@ -706,11 +751,12 @@ els.addScoreBtn.addEventListener("click", () => {
   try{
     addEntry(teamId, expr);
 
-    // Advance team selector to next team in order of play
+    // Advance selector to next team in order of play
     els.teamSelect.value = nextTeamId(teamId);
 
     els.exprInput.value = "";
     els.exprInput.focus();
+    applyInputMode(); // keep keyboard consistent
   }catch(err){
     showToast(err.message || "Invalid entry.", "bad");
   }
@@ -728,6 +774,11 @@ els.resetBtn.addEventListener("click", resetAll);
 
 els.saveOverrideBtn.addEventListener("click", saveOverride);
 els.clearCellBtn.addEventListener("click", clearCell);
+
+// Expression mode toggle
+if(els.exprModeToggle){
+  els.exprModeToggle.addEventListener("change", applyInputMode);
+}
 
 // Initial render
 render();
