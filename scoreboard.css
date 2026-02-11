@@ -171,7 +171,7 @@ input, select{
   padding:11px 12px;
   border-radius:12px;
   outline:none;
-  font-size:24px;
+  font-size:24px; /* (your change) */
   transition: box-shadow .15s ease, border-color .15s ease, background .15s ease;
 }
 input:focus, select:focus{
@@ -232,7 +232,7 @@ input:focus, select:focus{
 
 .table-wrap{
   max-height: 62vh;
-  overflow:auto;
+  overflow:auto; /* enables both vertical + horizontal scroll */
 }
 
 .score-table{
@@ -251,10 +251,11 @@ input:focus, select:focus{
 }
 .score-table th:last-child, .score-table td:last-child{ border-right:none; }
 
+/* sticky header row */
 .score-table thead th{
   position: sticky;
   top: 0;
-  z-index: 2;
+  z-index: 4;
   background: rgba(10,14,28,.88);
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
@@ -262,18 +263,37 @@ input:focus, select:focus{
   font-weight: 850;
 }
 
+/* === Narrow, sticky left column (round numbers) === */
 .score-table .corner{
-  min-width: 110px;
-  width: 110px;
-}
-.score-table .rowhead{
-  font-family:var(--mono);
-  color:var(--muted);
-  width:110px;
-  min-width:110px;
-  background: rgba(255,255,255,.02);
+  width: 30px;
+  min-width: 30px;
+  position: sticky;
+  left: 0;
+  z-index: 6; /* above header cells behind it */
+  background: rgba(10,14,28,.92);
 }
 
+.score-table .rowhead{
+  width: 30px;
+  min-width: 30px;
+  text-align: center;
+  padding-left: 8px;
+  padding-right: 8px;
+
+  position: sticky;
+  left: 0;
+  z-index: 5;
+  background: rgba(12,16,34,.92);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+/* keep totals left cell looking consistent */
+.totals-row .rowhead{
+  background: rgba(12,22,34,.94);
+}
+
+/* clickable cell styling */
 .cell{
   border-radius: 12px;
   padding: 10px 10px 9px;
@@ -334,6 +354,17 @@ input:focus, select:focus{
   background: rgba(62,231,200,.06);
   border-bottom: 1px solid rgba(62,231,200,.20);
 }
+
+.total-team{
+  font-size: 12px;
+  color: rgba(255,255,255,.72);
+  font-weight: 850;
+  letter-spacing: .2px;
+  margin-bottom: 6px;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
 .total-pill{
   font-family: var(--mono);
   font-size: 18px;

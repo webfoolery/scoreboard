@@ -1,11 +1,8 @@
 /* TNC Scoreboard (no frameworks)
-   - Table: teams as columns, rounds as rows, totals bottom
-   - Entry area below totals to append a score
-   - Tap any cell to override (manual edit)
-   - Undo last entry
-   - LocalStorage persistence
-   - Team play order controls (move up/down)
-   - Reset confirmation + clears localStorage
+   - Round row headers show only number (1,2,3...) for space
+   - Sticky, narrow left column for round numbers while horizontal scrolling
+   - Totals row shows team name + total value in each cell
+   - Reset confirmation clears localStorage
    - After adding score, team selector advances to next team
 */
 
@@ -31,14 +28,14 @@ const els = {
   clearCellBtn: $("#clearCellBtn"),
 };
 
-const STORAGE_KEY = "scoreboard.v5";
+const STORAGE_KEY = "scoreboard.v6";
 
 let state = loadState() ?? defaultState();
 
 /**
  * state structure
  * teams: [{id, name}]
- * rounds: [{ id, label, scoresByTeam: { [teamId]: Cell } }]
+ * rounds: [{ id, label: "1", "2"... , scoresByTeam: { [teamId]: Cell } }]
  * history: stack of actions for undo
  *
  * Cell: { expr: string, value: number, isOverride: boolean, isExpr: boolean }
@@ -241,7 +238,7 @@ function ensureRoundsTo(indexInclusive){
     const idx = state.rounds.length;
     state.rounds.push({
       id: crypto.randomUUID(),
-      label: `Round ${idx + 1}`,
+      label: `${idx + 1}`,          // ✅ only the number
       scoresByTeam: {}
     });
   }
@@ -368,6 +365,7 @@ function renderTable(){
   const table = els.scoreTable;
   table.innerHTML = "";
 
+  // THEAD
   const thead = document.createElement("thead");
   const trh = document.createElement("tr");
 
@@ -385,6 +383,7 @@ function renderTable(){
   thead.appendChild(trh);
   table.appendChild(thead);
 
+  // TBODY
   const tbody = document.createElement("tbody");
 
   for(let rIndex = 0; rIndex < state.rounds.length; rIndex++){
@@ -393,7 +392,7 @@ function renderTable(){
 
     const rowHead = document.createElement("th");
     rowHead.className = "rowhead";
-    rowHead.textContent = round.label;
+    rowHead.textContent = round.label; // ✅ just "1", "2", ...
     tr.appendChild(rowHead);
 
     for(const t of state.teams){
@@ -433,7 +432,8 @@ function renderTable(){
         big.textContent = "—";
         const small = document.createElement("div");
         small.className = "small";
-        small.textContent = "tap to add/override";
+        // small.textContent = "tap to add/override";
+        small.textContent = "";
         box.appendChild(big);
         box.appendChild(small);
       }
@@ -452,20 +452,28 @@ function renderTable(){
 
   const thTot = document.createElement("th");
   thTot.className = "rowhead";
-  thTot.textContent = "Total";
+  thTot.textContent = "T";
   trTot.appendChild(thTot);
 
   for(const t of state.teams){
     const td = document.createElement("td");
+
+    const name = document.createElement("div");
+    name.className = "total-team";
+    name.textContent = t.name;
+
     const v = totals[t.id] ?? 0;
-    const pill = document.createElement("div");
-    pill.className = "total-pill";
-    pill.textContent = fmt(v);
-    td.appendChild(pill);
+    const total = document.createElement("div");
+    total.className = "total-pill";
+    total.textContent = fmt(v);
+
+    td.appendChild(name);
+    td.appendChild(total);
+
     trTot.appendChild(td);
   }
-  tbody.appendChild(trTot);
 
+  tbody.appendChild(trTot);
   table.appendChild(tbody);
 }
 
@@ -598,7 +606,9 @@ function openOverrideModal(roundIndex, teamId){
   const round = state.rounds[roundIndex];
   const existing = round.scoresByTeam[teamId];
 
-  els.overrideSub.textContent = `${round.label} • ${team?.name ?? "Team"}`;
+  // Keep modal explicit even though table rowhead is just the number
+  els.overrideSub.textContent = `Round ${round.label} • ${team?.name ?? "Team"}`;
+
   els.overrideInput.value = existing ? existing.expr : "";
   els.overrideModal.setAttribute("aria-hidden", "false");
   setTimeout(() => els.overrideInput.focus(), 0);
