@@ -43,8 +43,8 @@ let state = loadState() ?? defaultState();
 function defaultState(){
   return {
     teams: [
-      { id: crypto.randomUUID(), name: "Team A" },
-      { id: crypto.randomUUID(), name: "Team B" },
+      { id: crypto.randomUUID(), name: "Team 1" },
+      { id: crypto.randomUUID(), name: "Team 2" },
     ],
     rounds: [],
     history: [],

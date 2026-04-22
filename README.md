@@ -11,3 +11,12 @@
 - All data for the current scores is stored, so if you refresh the page or leave it a while it'll remember what's what
 - 'Reset' clears the current scoring session & starts a fresh one
 - When adding numbers you can swap phone keyboard to one with digits & +/*- and just keep adding scores & pressing 'Enter'
+
+
+# Changelog
+
+### 2026-04-22
+* Updates JS to fix start teams being A/B and additional teams being 3/4/5 etc. Now all teams are numeric, ie. Team 1, Team 2 etc.
+* Removes the fixed height wrapper around the score table as that was unpleasant UI faff.
+* Larger text for the total row on team names & total scores
+* Changes to gradient background. It looked nice but had harsh vertical repeats. Now it's applied to specific containers
