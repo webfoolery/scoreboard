@@ -15,6 +15,11 @@
 
 # Changelog
 
+### 2026-07-09
+* adds a 'reset scores' button. This lets the user start a new game without needing to re-enter the team names
+* adds a new favicon
+* Small CSS tweaks
+
 ### 2026-04-22
 * Updates JS to fix start teams being A/B and additional teams being 3/4/5 etc. Now all teams are numeric, ie. Team 1, Team 2 etc.
 * Removes the fixed height wrapper around the score table as that was unpleasant UI faff.

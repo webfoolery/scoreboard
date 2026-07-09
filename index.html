@@ -1,21 +1,29 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TNC Scoreboard</title>
   <link rel="stylesheet" href="scoreboard.css?v=1770830873" />
+  <link rel="apple-touch-icon-precomposed" sizes="57x57" href="favicon/apple-touch-icon-57x57.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="114x114" href="favicon/apple-touch-icon-114x114.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="72x72" href="favicon/apple-touch-icon-72x72.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="favicon/apple-touch-icon-144x144.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="120x120" href="favicon/apple-touch-icon-120x120.png" />
+  <link rel="apple-touch-icon-precomposed" sizes="152x152" href="favicon/apple-touch-icon-152x152.png" />
+  <link rel="icon" type="image/png" href="favicon/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="favicon/favicon-16x16.png" sizes="16x16" />
+  <meta name="application-name" content="TNC Scoreboard" />
+  <meta name="msapplication-TileColor" content="#4D334D" />
+  <meta name="msapplication-TileImage" content="favicon/mstile-144x144.png" />
 </head>
+
 <body>
   <header class="app-header gradient-bg">
     <div class="title">
       <h1>TNC Scoreboard</h1>
-      <p>Digits or expressions. Tap a cell to override. Works great on phones.</p>
-    </div>
-
-    <div class="header-actions">
-      <button id="resetBtn" class="btn danger">Reset</button>
-      <button id="undoBtn" class="btn">Undo last entry</button>
+      <p>Define team names. Set the team order of play. Enter scores as digits or expressions. Tap a score cell to override/edit it.</p>
     </div>
   </header>
 
@@ -29,9 +37,15 @@
 
       <div class="card-body" id="teamsPanel"></div>
       <div class="card-foot">
-        Tip: Edit names. Use ↑ / ↓ to set play order. Remove teams (min 2).
+        Edit names. Use ↑ / ↓ to set play order. Remove teams (min 2).
       </div>
     </section>
+
+    <div class="score-actions" aria-label="Scoreboard actions">
+      <button id="resetBtn" class="btn danger">Reset all</button>
+      <button id="resetScoresBtn" class="btn danger">Reset scores</button>
+      <button id="undoBtn" class="btn">Undo last entry</button>
+    </div>
 
     <section class="card">
       <div class="card-head sticky">
@@ -54,14 +68,7 @@
 
           <div class="field grow">
             <label for="exprInput">Score / Expression</label>
-            <input
-              id="exprInput"
-              inputmode="text"
-              autocomplete="off"
-              autocapitalize="off"
-              spellcheck="false"
-              placeholder="e.g. 354  or  621 * 14 / 3"
-            />
+            <input id="exprInput" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="e.g. 354  or  621 * 14 / 3" />
             <div class="help">
               Allowed: <code>0-9</code> <code>+</code> <code>-</code> <code>*</code> <code>/</code> <code>( )</code> <code>.</code>
             </div>
@@ -93,14 +100,7 @@
       <div class="modal-body">
         <div class="field">
           <label for="overrideInput">New value (digits or expression)</label>
-          <input
-            id="overrideInput"
-            inputmode="text"
-            autocomplete="off"
-            autocapitalize="off"
-            spellcheck="false"
-            placeholder="e.g. 120 or (20+10)*4"
-          />
+          <input id="overrideInput" inputmode="text" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="e.g. 120 or (20+10)*4" />
           <div class="help">
             This replaces that cell. It will be marked as <span class="pill">override</span>.
           </div>
@@ -118,4 +118,5 @@
 
   <script src="scoreboard.js?v=1770830873"></script>
 </body>
+
 </html>

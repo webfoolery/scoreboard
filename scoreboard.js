@@ -16,6 +16,7 @@ const els = {
   addTeamBtn: $("#addTeamBtn"),
   undoBtn: $("#undoBtn"),
   resetBtn: $("#resetBtn"),
+  resetScoresBtn: $("#resetScoresBtn"),
   scoreTable: $("#scoreTable"),
   toast: $("#toast"),
   teamCount: $("#teamCount"),
@@ -595,6 +596,18 @@ function resetAll(){
   showToast("Reset complete.", "warn");
 }
 
+function resetScores(){
+  const ok = window.confirm(
+    "Reset all scores?\n\nThis will clear every score while keeping the team names."
+  );
+  if(!ok) return;
+
+  state.rounds = [];
+  state.history = [];
+  render();
+  showToast("Scores reset.", "warn");
+}
+
 // ---------------- Manual override modal ----------------
 let modalCtx = null; // {roundIndex, teamId}
 
@@ -733,6 +746,7 @@ els.exprInput.addEventListener("keydown", (e) => {
 
 els.undoBtn.addEventListener("click", undoLast);
 els.resetBtn.addEventListener("click", resetAll);
+els.resetScoresBtn.addEventListener("click", resetScores);
 
 els.saveOverrideBtn.addEventListener("click", saveOverride);
 els.clearCellBtn.addEventListener("click", clearCell);
